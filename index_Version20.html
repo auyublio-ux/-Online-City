@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ONLINE CITY ZONE SHOP — Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f3f6f9;
+      --primary-700:#1565c0;
+      --primary-600:#1e88e5;
+      --primary-400:#64b5f6;
+      --accent:#0b3d91;
+      --muted:#6c7a89;
+      --card-bg:#ffffff;
+      --radius:12px;
+      --container-max:1120px;
+      --shadow-1: 0 6px 24px rgba(16,24,40,0.08);
+      --shadow-2: 0 18px 50px rgba(16,24,40,0.12);
+      --success:#27ae60;
+      --warning:#f39c12;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Poppins", "Noto Sans Bengali", Arial, sans-serif;
+      background:linear-gradient(180deg,#eef6ff 0%, #f7fbff 100%);
+      color:#0f1724;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding-bottom:40px;
+    }
+
+    .wrap{max-width:var(--container-max);margin:0 auto;padding:0 20px;}
+    .skip-link{position: absolute;left: -999px;top: auto;width:1px;height:1px;overflow:hidden}
+    .skip-link:focus{left:16px;top:16px;width:auto;height:auto;padding:8px 12px;background:#000;color:#fff;border-radius:6px;z-index:1000}
+
+    /* PREMIUM HEADER */
+    header{
+      margin:28px 0 18px;
+      padding:20px;
+      border-radius:18px;
+      background: linear-gradient(135deg,var(--primary-700), var(--primary-600));
+      color:#fff;
+      box-shadow: var(--shadow-2);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .header-inner{ max-width:var(--container-max); margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+
+    .brand{ display:flex; align-items:center; gap:14px; }
+    .logo{ width:64px; height:64px; border-radius:14px; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(180deg,#ffffff22, rgba(255,255,255,0.06)); border:1px solid rgba(255,255,255,0.12); box-shadow: 0 8px 26px rgba(11,61,145,0.14); }
+    .site-title{ display:flex; flex-direction:column; line-height:1; margin-top:4px; }
+    .site-title .name{ font-weight:700; font-size:1.02rem; letter-spacing:0.2px; color:#fff; text-transform:none; }
+    .site-title .tag{ font-weight:400; font-size:0.78rem; color: rgba(255,255,255,0.92); margin-top:4px; }
+
+    /* small subnav under title: Contact / About / Profile / Order / Pending */
+    .title-subnav{ margin-top:8px; display:flex; gap:10px; align-items:center; }
+    .title-subnav a{ color:rgba(255,255,255,0.95); text-decoration:none; font-size:0.84rem; background: rgba(255,255,255,0.06); padding:6px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); }
+    .title-subnav .pending-mini{ background: rgba(243,156,18,0.12); color:#fff; font-weight:700; }
+
+    .header-actions{ display:flex; align-items:center; gap:12px; }
+    .nav-btn{ background: rgba(255,255,255,0.12); color:#fff; padding:8px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); font-weight:600; cursor:pointer; }
+    .badges{ display:flex; gap:8px; align-items:center; }
+    .badge{ background: rgba(255,255,255,0.12); color:#fff; padding:8px 12px; border-radius:999px; font-weight:700; font-size:0.95rem; border:1px solid rgba(255,255,255,0.08); }
+
+    /* Buttons in header transformed */
+    .btn-ghost{ background:transparent; border:1px solid rgba(255,255,255,0.12); color:#fff; padding:8px 12px; border-radius:10px; cursor:pointer; }
+
+    /* content */
+    main{ max-width:var(--container-max); margin:12px auto; padding:0 20px; }
+    .products{ display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); margin-top:12px; }
+    .card{ background: #fff; border-radius:12px; padding:16px; box-shadow: var(--shadow-1); display:flex; flex-direction:column; }
+    .card img{ width:100%; height:160px; object-fit:cover; border-radius:10px; margin-bottom:12px; }
+    .actions{ margin-top:auto; display:flex; gap:8px; justify-content:center; }
+    .btn{ padding:10px 14px; border-radius:10px; background:linear-gradient(90deg,var(--primary-600),var(--primary-400)); color:#fff; border:none; cursor:pointer; font-weight:700; }
+    .btn.secondary{ background:#eef3fb; color:var(--accent); }
+
+    footer{ max-width:var(--container-max); margin:32px auto 12px; text-align:center; color:var(--muted); }
+
+    /* MODALS */
+    .modal-backdrop{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(3,10,26,0.45); z-index:2000; padding:20px; }
+    .modal{ background:#fff; border-radius:12px; max-width:760px; width:100%; padding:18px; box-shadow:0 18px 60px rgba(3,10,26,0.2); }
+
+    /* AUTH GATE - premium two-column */
+    #auth-gate{ position:fixed; inset:0; z-index:3000; display:flex; align-items:center; justify-content:center; background: linear-gradient(180deg, rgba(3,10,26,0.6), rgba(3,10,26,0.5)); }
+    #auth-card{ width:820px; max-width:calc(100% - 40px); height:auto; display:flex; border-radius:14px; overflow:hidden; box-shadow:0 30px 90px rgba(3,10,26,0.65); background:linear-gradient(180deg,#fff,#f8fbff); }
+    .auth-left{ flex:1.1; padding:28px; background: linear-gradient(180deg, rgba(30,136,229,0.07), rgba(30,136,229,0.03)); display:flex; flex-direction:column; gap:14px; justify-content:center; }
+    .auth-right{ flex:1; padding:20px 28px; display:flex; flex-direction:column; gap:12px; justify-content:center; }
+
+    .auth-illustration{ width:100%; height:160px; border-radius:10px; background:linear-gradient(90deg,var(--primary-600),var(--primary-400)); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.05rem; box-shadow: inset 0 -8px 40px rgba(0,0,0,0.06); }
+
+    .social-row{ display:flex; gap:10px; margin-top:8px; }
+    .social-btn{ flex:1; padding:10px; border-radius:10px; border:1px solid rgba(16,24,40,0.06); display:flex; gap:8px; align-items:center; justify-content:center; cursor:pointer; font-weight:600; }
+    .social-google{ background:#fff; color:#333; }
+    .social-facebook{ background:#1877f2; color:#fff; }
+
+    .field{ display:flex; gap:8px; align-items:center; }
+    .input{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e6eef8; font-size:0.95rem; }
+
+    .pwd-row{ display:flex; gap:8px; align-items:center; }
+    .pwd-toggle{ cursor:pointer; background:transparent; border:0; color:var(--primary-600); font-weight:700; }
+
+    /* password strength */
+    .strength{ height:8px; border-radius:6px; background:#f1f5f9; overflow:hidden; margin-top:6px; }
+    .strength-bar{ height:100%; width:0%; background:linear-gradient(90deg,#f44336,#ff9800,#4caf50); transition:width .3s ease; }
+
+    @media (max-width:920px){
+      #auth-card{ width:92%; flex-direction:column; }
+      .auth-left{ display:none; } /* simplified on small screens */
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">প্রধান বিষয়বস্তুতে যান</a>
+
+  <header>
+    <div class="header-inner wrap">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">
+          <!-- refined logo -->
+          <svg viewBox="0 0 64 64" width="44" height="44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs><linearGradient id="lgA" x1="0" x2="1"><stop offset="0" stop-color="#6fb3ff"/><stop offset="1" stop-color="#1e88e5"/></linearGradient></defs>
+            <rect width="64" height="64" rx="12" fill="url(#lgA)"/>
+            <g transform="translate(9,9)"><circle cx="12" cy="12" r="10" fill="#fff" opacity="0.98"/><path d="M6 18 C12 6, 28 6, 34 18" stroke="#1e88e5" stroke-width="3" fill="none" stroke-linecap="round" /><rect x="16" y="8" width="6" height="8" rx="2" fill="#1e88e5" /></g>
+          </svg>
+        </span>
+
+        <div class="site-title">
+          <span class="name">ONLINE CITY ZONE SHOP</span>
+          <span class="tag">Quality • Trust • Fast Delivery</span>
+
+          <nav class="title-subnav" aria-label="Quick links under title">
+            <a href="#" id="sub-contact">Contact</a>
+            <a href="#" id="sub-about">About</a>
+            <a href="#" id="sub-profile">Profile</a>
+            <a href="#" id="sub-order">Order</a>
+            
+          </nav>
+        </div>
+      </div>
+
+      <div class="header-actions" role="navigation" aria-label="Site quick actions">
+        <button class="nav-btn btn-ghost" id="about-open">About</button>
+        <button class="nav-btn btn-ghost" id="contact-open">Contact</button>
+
+        <div class="badges" aria-hidden="false">
+          <div id="orders-count-badge" class="badge orders" title="মোট অর্ডার">অর্ডার: 0</div>
+          <div id="pending-count-badge" class="badge pending" title="পেন্ডিং অর্ডার">পেন্ডিং: 0</div>
+        </div>
+
+        <div id="auth-controls">
+          <button class="nav-btn" id="btn-login-header">Login</button>
+          <button class="nav-btn" id="btn-signup-header">Sign up</button>
+        </div>
+
+        <div id="user-controls" style="display:none; align-items:center; gap:8px;">
+          <span id="greeting" style="color:#fff; font-weight:600;"></span>
+          <button class="nav-btn" id="btn-profile-header">Profile</button>
+          <button class="nav-btn" id="btn-logout">Logout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section aria-labelledby="products-heading">
+      <h2 id="products-heading" class="sr-only">পণ্য তালিকা</h2>
+
+      <section class="products" aria-live="polite">
+        <article class="card" itemscope itemtype="http://schema.org/Product">
+          <img src="https://via.placeholder.com/800x600?text=পণ্য+১" alt="পণ্য ১ — ছবি" loading="lazy" />
+          <h3 itemprop="name">পণ্য ১</h3>
+          <p class="price" data-price="500" aria-label="মূল্য">দাম: <span class="price-text">৳500</span></p>
+          <div class="actions">
+            <button class="btn order-btn" data-name="পণ্য ১" data-price="500">অর্ডার করুন</button>
+          </div>
+        </article>
+
+        <article class="card" itemscope itemtype="http://schema.org/Product">
+          <img src="https://via.placeholder.com/800x600?text=পণ্য+২" alt="পণ্য ২ — ছবি" loading="lazy" />
+          <h3 itemprop="name">পণ্য ২</h3>
+          <p class="price" data-price="750" aria-label="মূল্য">দাম: <span class="price-text">৳750</span></p>
+          <div class="actions">
+            <button class="btn order-btn" data-name="পণ্য ২" data-price="750">অর্ডার করুন</button>
+          </div>
+        </article>
+
+        <article class="card" itemscope itemtype="http://schema.org/Product">
+          <img src="https://via.placeholder.com/800x600?text=পণ্য+৩" alt="পণ্য ৩ — ছবি" loading="lazy" />
+          <h3 itemprop="name">পণ্য ৩</h3>
+          <p class="price" data-price="1200" aria-label="মূল্য">দাম: <span class="price-text">৳1200</span></p>
+          <div class="actions">
+            <button class="btn order-btn" data-name="পণ্য ৩" data-price="1200">অর্ডার করুন</button>
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">© 2025 ONLINE CITY ZONE SHOP — </div>
+  </footer>
+
+  <!-- AUTH GATE (premium) -->
+  <div id="auth-gate" style="display:none">
+    <div id="auth-card">
+      <div class="auth-left">
+        <div style="font-weight:700; font-size:1.15rem; color:var(--primary-700)">Welcome to ONLINE CITY ZONE</div>
+        <div class="auth-illustration">Shop faster. Shop safer. Shop smart.</div>
+        <div class="small-muted">Create an account to save orders, track deliveries and manage your profile. You can also continue as guest.</div>
+
+        <div class="social-row" aria-hidden="true">
+          <div class="social-btn social-google" id="social-google">Google</div>
+          <div class="social-btn social-facebook" id="social-fb">Facebook</div>
+        </div>
+      </div>
+
+      <div class="auth-right">
+        <div class="tabs" role="tablist">
+          <button class="active" data-tab="login" id="gate-tab-login">Login</button>
+          <button data-tab="signup" id="gate-tab-signup">Sign up</button>
+        </div>
+
+        <div id="gate-login" style="display:block">
+          <form id="gate-login-form">
+            <input id="g-login-identifier" class="input" placeholder="Username or Email" required />
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="g-login-password" class="input" placeholder="Password" type="password" required />
+              <button type="button" class="pwd-toggle" id="g-login-toggle">Show</button>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button type="submit" class="btn">Login</button>
+              <button type="button" class="btn secondary" id="gate-guest">Continue as guest</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="gate-signup" style="display:none">
+          <form id="gate-signup-form">
+            <input id="g-signup-username" class="input" placeholder="Username" required />
+            <input id="g-signup-email" class="input" placeholder="Email" type="email" required />
+            <div class="pwd-row">
+              <input id="g-signup-password" class="input" placeholder="Password" type="password" required />
+              <button type="button" class="pwd-toggle" id="g-signup-toggle">Show</button>
+            </div>
+            <input id="g-signup-password2" class="input" placeholder="Confirm Password" type="password" required />
+            <div class="strength" aria-hidden="true"><div id="strength-bar" class="strength-bar"></div></div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button type="submit" class="btn">Create account</button>
+              <button type="button" class="btn secondary" id="gate-cancel">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div id="about-modal" class="modal-backdrop" role="presentation" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <header><h2>About</h2><button class="close-btn" data-close="about-modal">&times;</button></header>
+      <div>
+        <p style="margin:0 0 8px">ONLINE CITY ZONE SHOP — একটি পরিষ্কার ও দ্রুত ই‑কমার্স ডেমো। এখানে পণ্য ব্রাউজ করে অর্ডার করা যাবে।</p>
+        <p class="small-muted">ডেমো: পেমেন্ট বাস্তবায়নের জন্য অফিসিয়াল গেটওয়ে ও সার্ভার-ভেরিফিকেশন প্রয়োজন।</p>
+        <div style="margin-top:12px;display:flex;justify-content:flex-end">
+          <button class="btn secondary" data-close="about-modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Modal (FORM) -->
+  <div id="contact-modal" class="modal-backdrop" role="presentation" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <header><h2>Contact</h2><button class="close-btn" data-close="contact-modal">&times;</button></header>
+      <form id="contact-form">
+        <label>আপনার নাম</label>
+        <input id="contactName" class="input" required />
+        <label>ইমেইল / ফোন</label>
+        <input id="contactInfo" class="input" required />
+        <label>বার্তা</label>
+        <textarea id="contactMessage" class="input" rows="4" required></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+          <button type="submit" class="btn">Send</button>
+          <button type="button" class="btn secondary" data-close="contact-modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Modal (kept) -->
+  <div id="modal" class="modal-backdrop" role="presentation" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <header><h2 id="modal-title">অর্ডার ফর্ম</h2><button class="close-btn" id="modal-close">&times;</button></header>
+      <form id="order-form">
+        <p id="selected-product" style="margin:0 0 6px;font-weight:600"></p>
+        <input type="hidden" id="productName" />
+        <input type="hidden" id="productPrice" />
+
+        <label>আপনার নাম</label><input id="customerName" class="input" required />
+        <label>ফোন নম্বর</label><input id="customerPhone" class="input" required />
+        <label>ইমেইল</label><input id="customerEmail" class="input" required />
+        <label>গ্রাম</label><input id="customerVillage" class="input" />
+        <label>জেলা</label><input id="customerDistrict" class="input" />
+        <label>থানা</label><input id="customerThana" class="input" />
+        <label>ডেলিভারি ঠিকানা</label><textarea id="customerAddress" class="input" required></textarea>
+        <label>পরিমাণ</label><input id="quantity" class="input" name="quantity" type="number" min="1" value="1" />
+
+        <fieldset style="border:1px dashed #e6eef8;padding:12px;border-radius:10px;margin-top:8px">
+          <legend style="font-weight:600">পেমেন্ট পদ্ধতি</legend>
+          <label><input type="radio" name="paymentMethod" value="nagad" checked /> Nagad</label>
+          <label style="margin-left:10px"><input type="radio" name="paymentMethod" value="bkash" /> bKash</label>
+          <label style="margin-left:10px"><input type="radio" name="paymentMethod" value="cod" /> Cash on Delivery (COD)</label>
+
+          <div id="payment-instructions" style="margin-top:10px">
+            <div>পেমেন্ট করতে Nagad নম্বর (ডিফল্ট): <strong id="nagad-number">01777951671</strong></div>
+            <div class="small-muted" style="margin-top:6px">পেমেন্ট করে Transaction ID (TXN) এখানে লিখুন — অথবা ডেমো মোডে সাবমিটে TXN জেনারেট করা হবে।</div>
+          </div>
+
+          <div id="txn-row" style="margin-top:10px;display:block">
+            <label>Transaction ID (TXN) — পেমেন্টের পরে এখানে লিখুন</label>
+            <input id="paymentTxn" class="input" type="text" placeholder="TXN123456789" />
+          </div>
+        </fieldset>
+
+        <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+          <button type="button" class="btn secondary" id="modal-cancel">বাতিল</button>
+          <button type="submit" class="btn pay" id="pay-submit">পেমেন্ট নিশ্চিত করুন ও সাবমিট</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Profile Modal (Profile / Orders / Contacts) -->
+  <div id="profile-modal" class="modal-backdrop" role="presentation" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <header><h2>প্রোফাইল</h2><button class="close-btn" data-close="profile-modal">&times;</button></header>
+      <div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button class="tabs" data-tab="profile">Profile</button>
+          <button class="tabs" data-tab="orders">Orders</button>
+          <button class="tabs" data-tab="contacts">Contacts</button>
+        </div>
+
+        <div id="profile-panel">
+          <form id="profile-form">
+            <label>Username</label><input id="profileUsername" class="input" required />
+            <label>নাম</label><input id="profileName" class="input" required />
+            <label>ইমেইল</label><input id="profileEmail" class="input" type="email" />
+            <label>গ্রাম</label><input id="profileVillage" class="input" />
+            <label>জেলা</label><input id="profileDistrict" class="input" />
+            <label>থানা</label><input id="profileThana" class="input" />
+            <div style="display:flex;gap:8px;margin-top:8px;justify-content:flex-end">
+              <button type="submit" class="btn">প্রোফাইল সংরক্ষণ করুন</button>
+              <button type="button" class="btn secondary" data-close="profile-modal">Close</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="orders-panel" style="display:none; margin-top:12px">
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <button class="btn secondary" id="filter-all">All</button>
+            <button class="btn" id="filter-pending">Pending</button>
+          </div>
+          <div id="orders-list" class="list"></div>
+        </div>
+
+        <div id="contacts-panel" style="display:none; margin-top:12px">
+          <h3 style="margin-top:0">আপনার যোগাযোগসমূহ</h3>
+          <div id="contacts-list" class="list" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- local state (stored in localStorage) ---
+    const STORAGE_KEY = 'oczs_state_v2';
+    function loadState(){ try{ const s = localStorage.getItem(STORAGE_KEY); if(!s) return { users: [], currentUser: null, orders: [], contacts: [] }; const p = JSON.parse(s); if(!p.contacts) p.contacts = []; if(!p.users) p.users = []; if(!p.orders) p.orders = []; return p; }catch(e){ return { users: [], currentUser: null, orders: [], contacts: [] }; } }
+    function saveState(st){ localStorage.setItem(STORAGE_KEY, JSON.stringify(st)); }
+    let state = loadState();
+
+    // --- utilities ---
+    function $(id){ return document.getElementById(id); }
+    async function hashPassword(password){
+      const enc = new TextEncoder();
+      const data = enc.encode(password);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    const formatter = new Intl.NumberFormat('bn-BD',{ style:'currency', currency:'BDT', maximumFractionDigits:0 });
+    function formatPrice(n){ return formatter.format(Number(n||0)); }
+    document.querySelectorAll('.price').forEach(el=>{ const price = Number(el.dataset.price||0); const d=el.querySelector('.price-text'); if(d) d.textContent = formatPrice(price); });
+
+    // --- auth UI helpers ---
+    function refreshAuthUI(){
+      state = loadState();
+      const authControls = $('auth-controls'), userControls = $('user-controls');
+      if(state.currentUser){
+        if(authControls) authControls.style.display='none';
+        if(userControls) userControls.style.display='flex';
+        const u = (state.users || []).find(x=>x.username === state.currentUser);
+        if($('greeting')) $('greeting').textContent = u ? `Hi, ${u.name || u.username}` : `Hi, ${state.currentUser}`;
+      } else {
+        if(authControls) authControls.style.display='flex';
+        if(userControls) userControls.style.display='none';
+      }
+      updateOrdersBadges();
+      renderProfileForm();
+      renderContacts(); // update contact list UI
+    }
+    function updateOrdersBadges(){
+      state = loadState();
+      if($('orders-count-badge')) $('orders-count-badge').textContent = `অর্ডার: ${ (state.orders||[]).length || 0 }`;
+      const p = (state.orders||[]).filter(o => o.paymentStatus && o.paymentStatus !== 'paid').length;
+      if($('pending-count-badge')) $('pending-count-badge').textContent = `পেন্ডিং: ${p}`;
+      if($('sub-pending-count')) $('sub-pending-count').textContent = p;
+    }
+
+    // --- auth gate show/hide ---
+    function showAuthGateIfNeeded(){
+      state = loadState();
+      if(!state.currentUser && !sessionStorage.getItem('authGateDismissed')) {
+        if($('auth-gate')) $('auth-gate').style.display='flex';
+      } else {
+        if($('auth-gate')) $('auth-gate').style.display='none';
+      }
+    }
+
+    // --- signup / login logic (client-side demo) ---
+    async function signupUser({ username, email, password, extra={} }){
+      state = loadState();
+      if(state.users.some(u=>u.username.toLowerCase()===username.toLowerCase())) throw new Error('Username already taken');
+      if(email && state.users.some(u=>u.email && u.email.toLowerCase()===email.toLowerCase())) throw new Error('Email already used');
+      const hash = await hashPassword(password);
+      const user = { id:Date.now(), username, email, passwordHash:hash, ...extra, createdAt: new Date().toISOString() };
+      state.users.push(user);
+      saveState(state);
+      return user;
+    }
+    async function loginUser(identifier, password){
+      state = loadState();
+      const hash = await hashPassword(password);
+      const user = state.users.find(u => (u.username === identifier || (u.email && u.email === identifier)) && u.passwordHash === hash );
+      if(!user) throw new Error('Invalid credentials');
+      state.currentUser = user.username;
+      saveState(state);
+      return user;
+    }
+    function logoutUser(){ state = loadState(); state.currentUser = null; saveState(state); refreshAuthUI(); }
+
+    // --- wire auth gate tab switching ---
+    if($('gate-tab-login')) $('gate-tab-login').addEventListener('click', ()=>{ $('gate-login').style.display='block'; $('gate-signup').style.display='none'; $('gate-tab-login').classList.add('active'); $('gate-tab-signup').classList.remove('active'); });
+    if($('gate-tab-signup')) $('gate-tab-signup').addEventListener('click', ()=>{ $('gate-login').style.display='none'; $('gate-signup').style.display='block'; $('gate-tab-login').classList.remove('active'); $('gate-tab-signup').classList.add('active'); });
+
+    // show/hide password utilities
+    function togglePassword(inputId, toggleBtn){
+      const inp = $(inputId);
+      if(!inp) return;
+      if(inp.type === 'password'){ inp.type = 'text'; toggleBtn.textContent = 'Hide'; } else { inp.type = 'password'; toggleBtn.textContent = 'Show'; }
+    }
+    if($('g-login-toggle')) $('g-login-toggle').addEventListener('click', ()=> togglePassword('g-login-password', $('g-login-toggle')));
+    if($('g-signup-toggle')) $('g-signup-toggle').addEventListener('click', ()=> togglePassword('g-signup-password', $('g-signup-toggle')));
+    document.querySelectorAll('.pwd-toggle[data-toggle]').forEach(btn=> btn.addEventListener('click', ()=> togglePassword(btn.getAttribute('data-toggle'), btn)));
+
+    // password strength (simple)
+    function measureStrength(pw){
+      let score = 0;
+      if(!pw) return 0;
+      if(pw.length >= 8) score++;
+      if(/[A-Z]/.test(pw)) score++;
+      if(/[0-9]/.test(pw)) score++;
+      if(/[^A-Za-z0-9]/.test(pw)) score++;
+      return score; // 0..4
+    }
+    function updateStrengthBar(barEl, pw){
+      if(!barEl) return;
+      const score = measureStrength(pw);
+      const pct = (score / 4) * 100;
+      barEl.style.width = pct + '%';
+    }
+    if($('g-signup-password')) $('g-signup-password').addEventListener('input', ()=> updateStrengthBar($('strength-bar'), $('g-signup-password').value));
+    if($('signup-password')) $('signup-password').addEventListener('input', ()=> updateStrengthBar($('signup-strength-bar'), $('signup-password').value));
+
+    // gate login submit
+    if($('gate-login-form')) $('gate-login-form').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const id = $('g-login-identifier').value.trim();
+      const pw = $('g-login-password').value;
+      try{ await loginUser(id, pw); sessionStorage.setItem('authGateDismissed','1'); if($('auth-gate')) $('auth-gate').style.display='none'; refreshAuthUI(); alert('Successfully logged in'); }catch(err){ alert(err.message || 'Login failed'); }
+    });
+
+    // gate signup
+    if($('gate-signup-form')) $('gate-signup-form').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const username = $('g-signup-username').value.trim();
+      const email = $('g-signup-email').value.trim();
+      const pw = $('g-signup-password').value;
+      const pw2 = $('g-signup-password2').value;
+      if(pw !== pw2){ alert('Passwords do not match'); return; }
+      try{
+        await signupUser({ username, email, password: pw });
+        await loginUser(username, pw);
+        sessionStorage.setItem('authGateDismissed','1');
+        if($('auth-gate')) $('auth-gate').style.display='none';
+        refreshAuthUI();
+        alert('Account created and logged in');
+      }catch(err){ alert(err.message || 'Signup failed'); }
+    });
+
+    // guest / cancel
+    if($('gate-guest')) $('gate-guest').addEventListener('click', ()=>{ sessionStorage.setItem('authGateDismissed','1'); if($('auth-gate')) $('auth-gate').style.display='none'; });
+
+    // header login/signup modals
+    function openModal(id){ const m = $(id); if(!m) return; m.style.display='flex'; m.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; setTimeout(()=>{ const i=m.querySelector('input'); if(i) i.focus(); },50); }
+    function closeModal(id){ const m = $(id); if(!m) return; m.style.display='none'; m.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    if($('btn-login-header')) $('btn-login-header').addEventListener('click', ()=> openModal('login-modal'));
+    if($('btn-signup-header')) $('btn-signup-header').addEventListener('click', ()=> openModal('signup-modal'));
+    document.querySelectorAll('[data-close]').forEach(btn=> btn.addEventListener('click', ()=> closeModal(btn.getAttribute('data-close'))));
+
+    // login modal submit
+    if($('login-form')) $('login-form').addEventListener('submit', async (e)=>{ e.preventDefault(); const id = $('login-identifier').value.trim(); const pw = $('login-password').value; try{ await loginUser(id, pw); closeModal('login-modal'); refreshAuthUI(); alert('Logged in'); }catch(err){ alert(err.message || 'Login failed'); } });
+
+    // signup modal submit
+    if($('signup-form')) $('signup-form').addEventListener('submit', async (e)=>{ e.preventDefault(); const username = $('signup-username').value.trim(); const email = $('signup-email').value.trim(); const pw = $('signup-password').value; const pw2 = $('signup-password2').value; if(pw !== pw2){ alert('Passwords do not match'); return; } try{ await signupUser({ username, email, password: pw }); await loginUser(username, pw); closeModal('signup-modal'); refreshAuthUI(); alert('Account created and logged in'); }catch(err){ alert(err.message || 'Signup failed'); } });
+
+    // logout & profile open
+    if($('btn-logout')) $('btn-logout').addEventListener('click', ()=> { logoutUser(); alert('Logged out'); });
+    if($('btn-profile-header')) $('btn-profile-header').addEventListener('click', ()=> { openModal('profile-modal'); renderProfileTab(); });
+
+    // social buttons (placeholders)
+    if($('social-google')) $('social-google').addEventListener('click', ()=> alert('Google Sign-In placeholder — integrate OAuth on server for production.'));
+    if($('social-fb')) $('social-fb').addEventListener('click', ()=> alert('Facebook Sign-In placeholder — integrate OAuth on server for production.'));
+
+    // Order buttons require login (same pattern as before)
+    function requireLoginThen(action){
+      state = loadState();
+      if(state.currentUser){ action(); return; }
+      if($('auth-gate')) $('auth-gate').style.display='flex';
+      const w = setInterval(()=>{ state = loadState(); if(state.currentUser){ clearInterval(w); if($('auth-gate')) $('auth-gate').style.display='none'; action(); } },300);
+    }
+
+    document.querySelectorAll('.order-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const launch = ()=> {
+          const name = btn.dataset.name, price = btn.dataset.price;
+          if($('selected-product')) $('selected-product').textContent = name + ' — ' + formatPrice(Number(price));
+          if($('productName')) $('productName').value = name;
+          if($('productPrice')) $('productPrice').value = price;
+          // prefill from user profile if available
+          state = loadState();
+          if(state.currentUser){
+            const u = (state.users||[]).find(x=>x.username === state.currentUser);
+            if(u){
+              if($('customerName')) $('customerName').value = u.name || u.username || '';
+              if($('customerEmail')) $('customerEmail').value = u.email || '';
+            }
+          }
+          openModal('modal');
+        };
+        requireLoginThen(launch);
+      });
+    });
+
+    // order form submit: associate order with currentUser
+    (function hookOrderForm(){
+      const of = $('order-form');
+      if(!of) return;
+      of.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        state = loadState();
+        if(!state.currentUser){ alert('Please login to place order'); return; }
+        const custName = $('customerName').value.trim();
+        const phone = $('customerPhone').value.trim();
+        const email = $('customerEmail').value.trim();
+        const address = $('customerAddress').value.trim();
+        const product = $('productName').value;
+        const price = Number($('productPrice').value || 0);
+        const qty = Number($('quantity').value || 1);
+        const paymentMethod = (of.paymentMethod && of.paymentMethod.value) || 'nagad';
+        let txn = $('paymentTxn').value.trim();
+        if(!custName || !phone || !email || !address){ alert('নাম, ফোন, ইমেইল ও ঠিকানা অবশ্যই পূরণ করুন।'); return; }
+        if(paymentMethod !== 'cod' && !txn){
+          if(confirm('আপনি TXN লিখেননি — কি আপনি একটি ডেমো TXN জেনারেট করবেন? OK = জেনারেট')){ txn = 'TXN'+Math.floor(Math.random()*900000+100000)+Date.now().toString().slice(-5); alert('ডেমো TXN: '+txn); } else return;
+        }
+        const total = price * qty;
+        const order = {
+          id:Date.now(), product, price, qty, total,
+          customerName: custName, customerPhone: phone, customerEmail: email, customerAddress: address,
+          paymentMethod, paymentTxn: paymentMethod==='cod' ? '' : txn,
+          paymentStatus: paymentMethod==='cod' ? 'pending' : 'paid',
+          user: state.currentUser, when: new Date().toISOString()
+        };
+        state.orders = state.orders || [];
+        state.orders.push(order);
+        saveState(state);
+        closeModal('modal'); updateOrdersBadges(); alert('অর্ডার রেকর্ড করা হয়েছে, ধন্যবাদ!');
+      });
+    })();
+
+    // --- CONTACT: form handling & render contacts in profile ---
+    if($('contact-form')) $('contact-form').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = $('contactName').value.trim();
+      const info = $('contactInfo').value.trim();
+      const message = $('contactMessage').value.trim();
+      if(!name || !info || !message){ alert('সব ফিল্ড পূরণ করুন।'); return; }
+      state = loadState();
+      state.contacts = state.contacts || [];
+      const contact = { id: Date.now(), name, info, message, when: new Date().toISOString() };
+      state.contacts.push(contact);
+      saveState(state);
+      alert('ধন্যবাদ — আপনার বার্তা গ্রহণ করা হয়েছে।');
+      closeModal('contact-modal');
+      renderContacts();
+    });
+
+    function renderContacts(){
+      state = loadState();
+      const el = $('contacts-list');
+      if(!el) return;
+      el.innerHTML = '';
+      const contacts = (state.contacts || []).slice().reverse();
+      if(!contacts.length){ el.innerHTML = '<div class="item">কোন যোগাযোগ বার্তা নেই।</div>'; return; }
+      contacts.forEach(c=>{
+        const d = new Date(c.when);
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.innerHTML = `<strong>${c.name}</strong> — <span class="small-muted">${c.info}</span>
+          <div style="margin-top:6px">${c.message}</div>
+          <div class="small-muted" style="margin-top:6px">${d.toLocaleString('bn-BD')}</div>`;
+        el.appendChild(item);
+      });
+    }
+
+    // PROFILE panel & user's orders
+    function renderProfileForm(){
+      state = loadState();
+      const u = (state.users||[]).find(x=>x.username === state.currentUser);
+      if(u){
+        if($('profileUsername')) $('profileUsername').value = u.username || '';
+        if($('profileName')) $('profileName').value = u.name || '';
+        if($('profileEmail')) $('profileEmail').value = u.email || '';
+        if($('profileVillage')) $('profileVillage').value = u.village || '';
+        if($('profileDistrict')) $('profileDistrict').value = u.district || '';
+        if($('profileThana')) $('profileThana').value = u.thana || '';
+      } else {
+        if($('profileUsername')) $('profileUsername').value = '';
+        if($('profileName')) $('profileName').value = '';
+      }
+      if($('sub-pending-count')) $('sub-pending-count').textContent = (state.orders||[]).filter(o=>o.paymentStatus && o.paymentStatus!=='paid').length;
+    }
+
+    if($('profile-form')) $('profile-form').addEventListener('submit', (e)=>{ e.preventDefault(); state = loadState(); if(!state.currentUser){ alert('Please login to save profile'); return; } const user = state.users.find(u=>u.username === state.currentUser); if(user){ user.username = $('profileUsername').value.trim() || user.username; user.name = $('profileName').value.trim(); user.email = $('profileEmail').value.trim(); user.village = $('profileVillage').value.trim(); user.district = $('profileDistrict').value.trim(); user.thana = $('profileThana').value.trim(); saveState(state); alert('প্রোফাইল আপডেট করা হয়েছে'); refreshAuthUI(); } });
+
+    function renderOrders(filter){
+      state = loadState();
+      const list = $('orders-list');
+      if(!list) return;
+      list.innerHTML = '';
+      if(!state.currentUser){ list.innerHTML = '<div class="item">Please login to see your orders.</div>'; return; }
+      let orders = (state.orders||[]).slice().reverse().filter(o=>o.user === state.currentUser);
+      if(filter==='pending') orders = orders.filter(o => o.paymentStatus && o.paymentStatus !== 'paid');
+      if(!orders.length){ list.innerHTML = '<div class="item">কোন অর্ডার নেই।</div>'; return; }
+      orders.forEach(o=>{
+        const d = new Date(o.when);
+        const status = o.paymentStatus === 'paid' ? 'Paid' : 'Pending';
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `<strong>${o.product}</strong> — ${o.qty} × ${formatPrice(o.price)} = <strong>${formatPrice(o.total)}</strong>
+          <div class="small-muted">${o.customerName} • ${o.customerPhone} • ${o.customerEmail || '-'}</div>
+          <div style="margin-top:6px">${o.customerAddress}</div>
+          <div class="small-muted" style="margin-top:6px">Payment: ${o.paymentMethod.toUpperCase()} ${o.paymentTxn ? ' • TXN: ' + o.paymentTxn : ''}</div>
+          <div class="small-muted" style="margin-top:6px">${d.toLocaleString('bn-BD')}</div>
+          <div style="margin-top:6px"><strong>${status}</strong></div>`;
+        list.appendChild(div);
+      });
+    }
+
+    // wire profile modal tab buttons
+    function renderProfileTab(){
+      // default to profile panel
+      if($('profile-panel')) $('profile-panel').style.display = '';
+      if($('orders-panel')) $('orders-panel').style.display = 'none';
+      if($('contacts-panel')) $('contacts-panel').style.display = 'none';
+
+      // bind tab buttons inside profile modal
+      document.querySelectorAll('#profile-modal .tabs').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const tab = btn.getAttribute('data-tab');
+          document.querySelectorAll('#profile-modal .tabs').forEach(t=> t.classList.remove('active'));
+          btn.classList.add('active');
+          if(tab === 'profile'){
+            $('profile-panel').style.display = ''; $('orders-panel').style.display = 'none'; $('contacts-panel').style.display = 'none';
+            renderProfileForm();
+          } else if(tab === 'orders'){
+            $('profile-panel').style.display = 'none'; $('orders-panel').style.display = ''; $('contacts-panel').style.display = 'none';
+            renderOrders('all');
+          } else if(tab === 'contacts'){
+            $('profile-panel').style.display = 'none'; $('orders-panel').style.display = 'none'; $('contacts-panel').style.display = '';
+            renderContacts();
+          }
+        });
+      });
+      // ensure Profile tab marked active visually
+      document.querySelectorAll('#profile-modal .tabs').forEach(t=> t.classList.remove('active'));
+      const pbtn = document.querySelector('#profile-modal .tabs[data-tab="profile"]');
+      if(pbtn) pbtn.classList.add('active');
+      renderProfileForm();
+      renderContacts();
+    }
+
+    // Filter buttons for orders in profile modal
+    if($('filter-all')) $('filter-all').addEventListener('click', ()=> renderOrders('all'));
+    if($('filter-pending')) $('filter-pending').addEventListener('click', ()=> renderOrders('pending'));
+
+    // subnav quick links wiring: About, Contact, Profile, Order, Pending
+    if($('sub-about')) $('sub-about').addEventListener('click', (e)=>{ e.preventDefault(); openModal('about-modal'); });
+    if($('sub-contact')) $('sub-contact').addEventListener('click', (e)=>{ e.preventDefault(); openModal('contact-modal'); });
+    if($('sub-profile')) $('sub-profile').addEventListener('click', (e)=>{ e.preventDefault(); openModal('profile-modal'); renderProfileTab(); });
+    if($('sub-order')) $('sub-order').addEventListener('click', (e)=>{ e.preventDefault(); /* open generic order modal */ openModal('modal'); });
+    if($('sub-pending')) $('sub-pending').addEventListener('click', (e)=>{ e.preventDefault(); openModal('profile-modal'); renderProfileTab(); renderOrders('pending'); });
+
+    // header buttons (already wired above in several places)
+    if($('about-open')) $('about-open').addEventListener('click', ()=> openModal('about-modal'));
+    if($('contact-open')) $('contact-open').addEventListener('click', ()=> openModal('contact-modal'));
+
+    // contact messages rendered if user opens profile -> contacts
+    // already implemented in renderContacts()
+
+    // initialize UI
+    (function init(){ updateOrdersBadges(); refreshAuthUI(); showAuthGateIfNeeded(); renderContacts(); })();
+
+    // Security/debug note
+    console.log('Demo: auth & users & contacts stored in localStorage. For production, move auth and contacts to a secure server and use proper backend validation and protections.');
+  </script>
+</body>
+</html>
